@@ -28,7 +28,7 @@ jobs:
         run: ./mvnw package -Pnative -DskipTests -Dquarkus.native.container-build=true
 
       - name: 'Upload Artifact'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: backend-${{ steps.bump.outputs.version }}
           path: backend/target/backend-${{ steps.bump.outputs.version }}-runner
