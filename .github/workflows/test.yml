@@ -3,13 +3,10 @@
 name: CI build
 
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -18,8 +15,15 @@ jobs:
         uses: actions/setup-java@v4
         with:
           java-version: 21
-          distribution: temurin
+          distribution: zulu
           cache: maven
 
       - name: Build
-        run: ./mvnw verify -B
+        run: ./mvnw clean verify
+
+  build:
+    needs: test
+    uses: ./.github/workflows/build.yml
+    secrets: inherit
+    with:
+      version: ${{inputs.version}}
