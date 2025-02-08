@@ -30,8 +30,8 @@ jobs:
       - name: 'Upload Artifact'
         uses: actions/upload-artifact@v4
         with:
-          name: backend-${{ steps.bump.outputs.version }}
-          path: backend/target/backend-${{ steps.bump.outputs.version }}-runner
+          name: backend-${{ inputs.version }}
+          path: backend/target/backend-${{ inputs.version }}-runner
           retention-days: 5
 
   publish:

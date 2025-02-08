@@ -4,6 +4,11 @@ name: CI build
 
 on:
   workflow_dispatch:
+    inputs:
+      version:
+        description: 'Tag Name'
+        required: true
+        default: '1.0.0'
 
 jobs:
   test:
