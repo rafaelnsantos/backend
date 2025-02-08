@@ -31,8 +31,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: backend-${{ inputs.version }}
-          path: backend/target/backend-${{ inputs.version }}-runner
-          retention-days: 5
+          path: target/backend-${{ inputs.version }}-runner
 
   publish:
     needs: build
