@@ -6,13 +6,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import tech.monx.RandomWrapper;
 import tech.monx.game.skills.Skill;
 import tech.monx.game.exceptions.PlayerStunnedException;
 import tech.monx.websocket.model.enums.battle.BattleSkillsEnum;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 @Data
 @AllArgsConstructor
@@ -64,7 +64,7 @@ public class GameState {
             return;
         }
 
-        int randomSpeed = new Random().nextInt(5);
+        int randomSpeed = RandomWrapper.random.nextInt(5);
 
         log.info("New player {}", playerId);
         Player newPlayer = Player.builder()

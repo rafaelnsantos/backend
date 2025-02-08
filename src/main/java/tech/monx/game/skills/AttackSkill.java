@@ -2,16 +2,14 @@ package tech.monx.game.skills;
 
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
+import tech.monx.RandomWrapper;
 import tech.monx.game.Player;
 import tech.monx.game.exceptions.GameOverException;
 import tech.monx.websocket.model.enums.battle.BattleSkillsEnum;
 
-import java.util.Random;
-
 @Slf4j
 @Builder
 public class AttackSkill implements Skill {
-    private static final Random random = new Random();
 
     @Override
     public void execute(Player actor, Player target) throws GameOverException {
@@ -46,14 +44,14 @@ public class AttackSkill implements Skill {
 
     private boolean attackHits(double accuracy, double evasion) {
         double hitChance = accuracy - evasion; // Higher accuracy increases hit chance, higher evasion decreases it
-        double roll = random.nextDouble(1); // Generate a random number from 0 to 99
+        double roll = RandomWrapper.random.nextDouble(1); // Generate a random number from 0 to 99
         log.info("hitChance {}\nroll {}", hitChance, roll);
 
         return roll < hitChance; // Attack hits if roll is less than the calculated hit chance
     }
 
     private boolean critHits(double critChance) {
-        double roll = random.nextDouble(1);
+        double roll = RandomWrapper.random.nextDouble(1);
 
         return roll < critChance;
     }

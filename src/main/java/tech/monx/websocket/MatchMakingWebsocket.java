@@ -45,7 +45,7 @@ public class MatchMakingWebsocket {
         assert event.getEvent() != null;
 
         switch (event.getEvent()) {
-            case WebsocketClientEventEnum.CHECK -> matchMaking.checkQueue(playerId, connection);
+            case WebsocketClientEventEnum.CHECK -> matchMaking.checkQueue(connection);
             default -> throw new IllegalStateException("Unexpected value: " + event.getEvent());
         }
     }

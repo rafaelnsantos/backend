@@ -36,9 +36,9 @@ public class Queue {
         queue.removeIf(p -> p.getId().equals(playerId));
     }
 
-    public void checkQueue(String playerId, WebSocketConnection connection) {
+    public void checkQueue(WebSocketConnection connection) {
         final int ROOM_SIZE = 2;
-        if (queue.isEmpty() || (queue.size() < ROOM_SIZE && !isCreatingGame())) {
+        if (queue.isEmpty() || (!isCreatingGame() && queue.size() < ROOM_SIZE)) {
             log.info("waiting players...");
             return;
         }
@@ -53,11 +53,9 @@ public class Queue {
         assert nextPlayer != null;
 
         if (nextPlayer.getConnectionId().equals(connection.id())) {
-            var token = tokenService.generateGameToken(playerId, gameId);
-
             var event = ServerEvent.<String>builder()
                     .event(WebsocketServerEventEnum.GAME_FOUND)
-                    .payload(token)
+                    .payload(gameId)
                     .build();
 
             connection.sendTextAndAwait(event);
@@ -69,6 +67,7 @@ public class Queue {
 
         if (playerCount == ROOM_SIZE) {
             log.info("Game {} full", gameId);
+            playerCount = 0;
             gameId = null;
         }
     }
