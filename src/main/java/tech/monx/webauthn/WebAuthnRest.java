@@ -57,7 +57,8 @@ public class WebAuthnRest {
             this.webAuthnSecurity.rememberUser(credentialRecord.getUsername(), ctx);
 
             return createTokenResponse(user.id.toString());
-        } catch (Exception ignored) {
+        } catch (Exception exception) {
+            exception.printStackTrace();
             // handle login failure - make a proper error response
             return Response.status(Status.BAD_REQUEST).build();
         }
@@ -92,12 +93,12 @@ public class WebAuthnRest {
                     new WebAuthnCredential(credentialRecord, newUser);
             credential.persist();
             newUser.persist();
-            log.info("aqi {}", credentialRecord.getCredentialID());
             // make a login cookie
             this.webAuthnSecurity.rememberUser(newUser.username, ctx);
 
             return createTokenResponse(newUser.id.toString());
-        } catch (Exception ignored) {
+        } catch (Exception exception) {
+            exception.printStackTrace();
             // handle login failure
             // make a proper error response
             return Response.status(Status.BAD_REQUEST).build();
