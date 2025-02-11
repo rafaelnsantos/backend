@@ -8,6 +8,9 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    outputs:
+      VERSION: ${{ steps.vars.outputs.VERSION }}
+
     steps:
       - uses: actions/checkout@v4
 
@@ -31,6 +34,7 @@ jobs:
   build:
     needs: test
     uses: ./.github/workflows/build.yml
+
     secrets: inherit
     with:
-      version: ${{ env.VERSION }}
+      version: ${{ test.vars.outputs.VERSION }}
