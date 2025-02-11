@@ -23,11 +23,11 @@ jobs:
 
       - name: Get version
         id: vars
-        run: echo "version=$(cat pom.xml | xq -x /project/version)" >> $GITHUB_OUTPUT
+        run: echo "VERSION=$(cat pom.xml | xq -x /project/version)" >> $GITHUB_ENV
 
   build:
     needs: test
     uses: ./.github/workflows/build.yml
     secrets: inherit
     with:
-      version: ${{steps.vars.outputs.version}}
+      version: $VERSION
