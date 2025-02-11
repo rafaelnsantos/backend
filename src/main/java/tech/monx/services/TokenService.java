@@ -48,9 +48,6 @@ public class TokenService {
 
         var storedRefreshToken = redis.get(deviceId);
 
-        log.info("Stored refresh token: {}", storedRefreshToken);
-        log.info("Refresh token: {}", refreshToken);
-
         if (!refreshToken.equals(storedRefreshToken)) {
             throw new ForbiddenException();
         }

@@ -3,15 +3,14 @@ package tech.monx.game.skills;
 import lombok.Builder;
 import tech.monx.game.Player;
 import tech.monx.game.effects.PoisonEffect;
-import tech.monx.game.exceptions.GameOverException;
 import tech.monx.websocket.model.enums.battle.BattleSkillsEnum;
 
 @Builder
 public class PoisonSkill implements Skill {
     @Override
-    public void execute(Player actor, Player target) throws GameOverException {
+    public void execute(Player actor, Player target) {
         target.newEffect(PoisonEffect.builder()
-                        .damagePerTurn(calculateDamage(actor, target))
+                        .damagePerTurn(getDamage(actor, target))
                         .remainingTurns(10)
                         .build());
     }
@@ -22,13 +21,12 @@ public class PoisonSkill implements Skill {
     }
 
     @Override
-    public int getCost() {
+    public int getCost(Player actor, Player target) {
         return 10;
     }
 
-
-    private int calculateDamage(Player actor, Player target) {
-        // TODO: calcs
+    @Override
+    public int getDamage(Player actor, Player target) {
         return 2;
     }
 }

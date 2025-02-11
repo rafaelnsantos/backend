@@ -21,7 +21,7 @@ public class AttackSkill implements Skill {
                 damage *= 2;
             }
 
-            target.takeDamage(getBaseDamage() + damage);
+            target.takeDamage(getDamage(actor, target) + damage);
         } else {
             log.info("Missed");
         }
@@ -33,18 +33,18 @@ public class AttackSkill implements Skill {
     }
 
     @Override
-    public int getCost() {
+    public int getCost(Player actor, Player target) {
         return 0;
     }
 
     @Override
-    public int getBaseDamage() {
+    public int getDamage(Player actor, Player target) {
         return 10;
     }
 
     private boolean attackHits(double accuracy, double evasion) {
         double hitChance = accuracy - evasion; // Higher accuracy increases hit chance, higher evasion decreases it
-        double roll = RandomWrapper.random.nextDouble(1); // Generate a random number from 0 to 99
+        double roll = RandomWrapper.random.nextDouble(1); // Generate a random number from 0 to 1
         log.info("hitChance {}\nroll {}", hitChance, roll);
 
         return roll < hitChance; // Attack hits if roll is less than the calculated hit chance

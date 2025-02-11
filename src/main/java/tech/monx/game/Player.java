@@ -7,10 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import tech.monx.game.effects.Effect;
-import tech.monx.game.effects.StunEffect;
 import tech.monx.game.effects.buffs.Buff;
-import tech.monx.game.effects.buffs.BuffEvasionEffect;
-import tech.monx.game.exceptions.GameOverException;
+import tech.monx.game.exceptions.OutOfManaException;
 import tech.monx.game.skills.AttackSkill;
 import tech.monx.game.skills.PoisonSkill;
 import tech.monx.game.skills.Skill;
@@ -59,13 +57,11 @@ public class Player implements Serializable {
         return connection != null;
     }
 
-    public void takeDamage(int damage) throws GameOverException {
+    public void takeDamage(int damage) {
         health -= damage;
         if (health <= 0) {
             health = 0;
-            throw new GameOverException(id);
         }
-        log.info("{} took {} damage, HP {}", id, damage, health);
     }
 
     public void newEffect(Effect effect) {
@@ -100,5 +96,13 @@ public class Player implements Serializable {
 
     public void onTurnStart() {
         runEffects();
+    }
+
+    public void useMana(int mana) throws OutOfManaException {
+        if (mana > this.mana) {
+            throw new OutOfManaException();
+        };
+
+        this.mana -= mana;
     }
 }

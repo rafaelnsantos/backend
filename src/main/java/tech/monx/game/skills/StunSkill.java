@@ -21,7 +21,12 @@ public class StunSkill implements Skill {
     }
 
     @Override
-    public int getCost() {
+    public int getCost(Player actor, Player target) {
         return 20;
+    }
+
+    @Override
+    public int getDamage(Player actor, Player target) {
+        return 0;
     }
 }

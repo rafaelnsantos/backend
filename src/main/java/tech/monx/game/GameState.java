@@ -123,8 +123,7 @@ public class GameState {
     private void playerAction(Skill skill, Player target) {
         var player = getCurrentPlayer();
 
-        // do action
-        skill.execute(player, target);
+        skill.run(player, target);
 
         startTurn();
     }
