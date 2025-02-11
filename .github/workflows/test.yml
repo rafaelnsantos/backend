@@ -4,11 +4,6 @@ name: CI build
 
 on:
   workflow_dispatch:
-    inputs:
-      version:
-        description: 'Tag Name'
-        required: true
-        default: '1.0.0'
 
 jobs:
   test:
@@ -26,9 +21,13 @@ jobs:
       - name: Build
         run: ./mvnw clean verify
 
+      - name: Get version
+        id: vars
+        run: echo "version=$(cat pom.xml | xq -x /project/version)" >> $GITHUB_OUTPUT
+
   build:
     needs: test
     uses: ./.github/workflows/build.yml
     secrets: inherit
     with:
-      version: ${{inputs.version}}
+      version: ${{steps.vars.outputs.version}}
