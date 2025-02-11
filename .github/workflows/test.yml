@@ -29,7 +29,7 @@ jobs:
 
       - name: Get version
         id: vars
-        run: echo "VERSION=$(cat pom.xml | xq -x /project/version)" >> $GITHUB_ENV
+        run: echo "VERSION=$(cat pom.xml | xq -x /project/version)" >> $GITHUB_OUTPUT
 
   build:
     needs: test
@@ -37,4 +37,4 @@ jobs:
 
     secrets: inherit
     with:
-      version: ${{ test.vars.outputs.VERSION }}
+      version: ${{ jobs.test.outputs.VERSION }}
