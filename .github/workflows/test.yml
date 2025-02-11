@@ -37,4 +37,4 @@ jobs:
 
     secrets: inherit
     with:
-      version: ${{ jobs.test.outputs.VERSION }}
+      version: ${{ needs.test.outputs.VERSION }}
