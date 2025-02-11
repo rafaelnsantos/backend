@@ -21,6 +21,9 @@ jobs:
       - name: Build
         run: ./mvnw clean verify
 
+      - name: Install xq
+        run: sudo apt install -y xq
+
       - name: Get version
         id: vars
         run: echo "VERSION=$(cat pom.xml | xq -x /project/version)" >> $GITHUB_ENV
