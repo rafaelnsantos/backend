@@ -1,5 +1,6 @@
 package tech.monx.webauthn;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.BeanParam;
@@ -20,6 +21,7 @@ import tech.monx.services.TokenService;
 
 @Path("webauthn")
 @Slf4j
+@RegisterForReflection(targets = WebAuthnRegisterResponse.class)
 public class WebAuthnRest {
 
     @Inject
@@ -115,14 +117,5 @@ public class WebAuthnRest {
                 .cookie(cookieService.createRefreshCookie(tokens.getRefreshToken()))
                 .build();
     }
-
-
-    private Response clearTokenResponse() {
-        return Response.status(Response.Status.UNAUTHORIZED)
-                .header("Set-Cookie", "token=; HttpOnly; Path=/; Max-Age=0")
-                .header("Set-Cookie", "refreshToken=; HttpOnly; Path=/v1/auth/refresh; Max-Age=0")
-                .build();
-    }
-
 
 }
