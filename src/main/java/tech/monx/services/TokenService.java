@@ -8,6 +8,7 @@ import jakarta.ws.rs.ForbiddenException;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.jwt.Claims;
+import tech.monx.services.redis.RefreshTokenRedisService;
 import tech.monx.webauthn.TokensDao;
 
 import java.time.Duration;
@@ -28,7 +29,7 @@ public class TokenService {
     int tokenExpiration;
 
     @Inject
-    RedisDataSource redisDataSource;
+    RefreshTokenRedisService refreshTokenRedisService;
 
     public TokensDao generateAuthTokens(String id) {
         return generateAuthTokens(id, UUID.randomUUID().toString());
@@ -44,9 +45,7 @@ public class TokenService {
     }
 
     public TokensDao refreshToken(String userId, String deviceId, String refreshToken) {
-        var redis = redisDataSource.value(String.class);
-
-        var storedRefreshToken = redis.get(deviceId);
+        var storedRefreshToken = refreshTokenRedisService.redis.get(deviceId);
 
         if (!refreshToken.equals(storedRefreshToken)) {
             throw new ForbiddenException();
@@ -54,15 +53,14 @@ public class TokenService {
 
         return generateAuthTokens(userId, deviceId);
     }
+
     private TokensDao generateAuthTokens(String id, String deviceUUID) {
         log.info("Generating tokens for id: {}", id);
 
         String token = generateLoginToken(id, deviceUUID);
         String refreshToken = generateRefreshToken(id, deviceUUID);
 
-        var redis = redisDataSource.value(String.class);
-
-        redis.setex(deviceUUID, refreshTokenExpiration ,refreshToken);
+        refreshTokenRedisService.redis.setex(deviceUUID, refreshTokenExpiration ,refreshToken);
         log.info("Saved refresh token");
 
         return TokensDao.builder()
