@@ -2,49 +2,32 @@ package tech.monx.rest;
 
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.inject.Inject;
-import jakarta.transaction.Transactional;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.SecurityContext;
+import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
-import org.eclipse.microprofile.jwt.Claim;
-import org.eclipse.microprofile.jwt.Claims;
-import org.eclipse.microprofile.jwt.JsonWebToken;
-import tech.monx.services.TokenService;
-import tech.monx.webauthn.CookieService;
 
 @Path("auth")
 @RequestScoped
 @Slf4j
 public class RefreshTokenRest {
-    @Inject
-    @Claim(standard = Claims.upn)
-    String deviceId;
+    @Context
+    SecurityContext context;
 
-    @Inject
-    JsonWebToken jwt;
-
-    @Inject
-    @Claim(standard = Claims.sub)
-    String userId;
-
-    @Inject
-    TokenService tokenService;
-
-    @Inject
-    CookieService cookieService;
-
-    @Path("/refresh")
     @GET
-    @Transactional
-    @RolesAllowed({"refresh"})
-    public Response refresh() {
-        var tokens = tokenService.refreshToken(userId, deviceId, jwt.getRawToken());
-        return Response.ok(tokens)
-                .cookie(cookieService.createCookie(tokens.getToken()))
-                .cookie(cookieService.createRefreshCookie(tokens.getRefreshToken()))
-                .build();
+    @RolesAllowed("user")
+    @Path("test")
+    public Response test() {
+
+        return Response.ok(TestDto.builder().message(context.getUserPrincipal().getName()).build()).build();
+    }
+
+    @Builder
+    static class TestDto {
+        public String message;
     }
 
 }

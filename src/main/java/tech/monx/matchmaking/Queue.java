@@ -2,9 +2,7 @@ package tech.monx.matchmaking;
 
 import io.quarkus.websockets.next.WebSocketConnection;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
-import tech.monx.services.TokenService;
 import tech.monx.websocket.events.ServerEvent;
 import tech.monx.websocket.model.dto.enums.WebsocketServerEventEnum;
 
@@ -17,9 +15,6 @@ public class Queue {
     private static final PriorityQueue<PlayerMatchMaking> queue = new PriorityQueue<>();
     private static String gameId = null;
     private static int playerCount = 0;
-
-    @Inject
-    TokenService tokenService;
 
     public void joinQueue(String playerId, WebSocketConnection connection) {
         log.debug("Joining {} to queue", playerId);

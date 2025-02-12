@@ -1,4 +1,4 @@
-package tech.monx.webauthn;
+package tech.monx.services;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.core.NewCookie;
