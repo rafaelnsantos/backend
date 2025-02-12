@@ -1,5 +1,6 @@
 package tech.monx.rest;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.GET;
@@ -26,6 +27,7 @@ public class RefreshTokenRest {
     }
 
     @Builder
+    @RegisterForReflection
     static class TestDto {
         public String message;
     }
